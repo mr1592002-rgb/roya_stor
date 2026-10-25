@@ -133,6 +133,53 @@
  .cartSummary{padding:13px}
  .cartNavButton .cartBadge{right:4px;top:-3px}
 }
+
+/* ROYA STOR v8: preview-only checkout; customer data is never stored or sent */
+.cartCheckout{background:#80583c!important;color:#fff!important;border-color:#80583c!important;flex:1;min-width:200px}
+.checkoutOverlay{position:fixed;inset:0;z-index:110;background:#1b1214c7;display:none;justify-content:center;align-items:center;padding:14px}
+.checkoutOverlay.show{display:flex}
+.checkoutSheet{width:min(920px,100%);max-height:calc(100dvh - 28px);overflow-y:auto;overscroll-behavior:contain;padding:22px 23px 30px;border-radius:23px;background:#fffdfa;color:#493628;box-shadow:0 18px 52px #30201460}
+.checkoutTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;border-bottom:1px solid #e5d8c6;padding-bottom:12px}
+.checkoutTop h2{margin:0;color:#684a35;font-size:23px}
+.checkoutTop p{margin:5px 0 0;font-size:12px;color:#8e775e}
+.checkoutBanner{background:#fff1df;border:1px solid #e9cfab;border-radius:13px;font-size:13px;line-height:1.8;color:#754c2c;padding:12px 14px;margin:16px 0}
+.checkoutSection{border:1px solid #e8d7c3;border-radius:15px;background:#fff;padding:16px;margin:16px 0}
+.checkoutSection h3{color:#63452f;font-size:17px;margin:0 0 13px}
+.checkoutFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.checkoutField{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;color:#6b5741;font-weight:700}
+.checkoutField.wide{grid-column:1/-1}
+.checkoutField input,.checkoutField select,.checkoutField textarea{min-width:0;width:100%;font-family:inherit;font-size:15px;border:1px solid #d8c4ab;background:#fffdf8;color:#483a2b;border-radius:10px;padding:12px 10px;box-sizing:border-box;outline:none}
+.checkoutField textarea{resize:vertical;min-height:74px}
+.checkoutField input:focus,.checkoutField select:focus,.checkoutField textarea:focus{border-color:#a27c54;box-shadow:0 0 0 2px #d5b99d73}
+.checkoutField small{font-size:11px;color:#8c7a68;font-weight:400}
+.checkoutRadio{border:1px solid #d8c4ab;border-radius:11px;padding:13px;background:#f8f2ea;font-size:14px;color:#6a4b33;display:flex;align-items:center;gap:10px}
+.checkoutRadio input{width:auto;flex:0 0 auto}
+.checkoutPrice{background:#faf3e9;border-radius:14px;border:1px solid #e1cbb0;padding:15px;margin:13px 0}
+.checkoutPriceRow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;color:#5d4c3f;font-size:14px}
+.checkoutPriceRow strong{font-weight:800;direction:ltr;unicode-bidi:isolate}
+.checkoutPriceRow.big{padding-top:12px;border-top:1px dashed #cdb69b;font-size:20px;font-weight:800;color:#744d32}
+.checkoutLineItems{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.checkoutPill{background:#f5ebdd;padding:7px 10px;border:1px solid #dfccb6;color:#70543b;border-radius:18px;font-size:12px}
+.checkoutActions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.checkoutActions button{padding:13px 18px;border:1px solid #d2bba1;background:#fff;color:#785338;border-radius:11px;font-weight:800;font-family:inherit;font-size:14px;cursor:pointer}
+.checkoutActions .checkoutPrimary{background:#80583c;color:white;border-color:#80583c;flex:1}
+.checkoutReview{border:1px solid #c5d7c0;background:#f2f8ee;padding:16px;border-radius:14px;margin-top:18px;color:#36543e}
+.checkoutReview h3{margin:0 0 9px;font-size:18px}
+.checkoutReview p{margin:7px 0;line-height:1.7;font-size:13px}
+.checkoutReview[hidden]{display:none}
+.checkoutError{color:#a23034;font-size:13px;font-weight:700;min-height:16px;margin-top:7px}
+.checkoutError:empty{display:none}
+.checkoutHelp{font-size:12px;color:#816b53;line-height:1.7;margin-top:9px}
+@media(max-width:590px){
+ .checkoutOverlay{padding:0;align-items:flex-end}
+ .checkoutSheet{width:100%;height:calc(100dvh - 6px);max-height:calc(100dvh - 6px);border-radius:18px 18px 0 0;padding:17px 13px 32px}
+ .checkoutTop h2{font-size:20px}
+ .checkoutFields{grid-template-columns:1fr;gap:12px}
+ .checkoutField.wide{grid-column:1}
+ .checkoutSection{padding:12px}
+ .checkoutPriceRow.big{font-size:18px}
+ .cartCheckout{width:100%}
+}
 </style></head>
 <body>
 <div class="announcement">نسخة معاينة فقط — <strong>الطلبات والشراء غير مفعّلين</strong> لحين اعتماد المتجر</div>
@@ -192,9 +239,50 @@
       <div class="cartSumRow final"><span id="cartTotalLabel">إجمالي المنتجات بعد الخصم</span><strong id="cartTotal">0 جنيه</strong></div>
       <p class="cartMiniNote" id="cartShippingNote">الشحن غير محسوب. الدفع والطلب الحقيقي غير متاحين.</p>
     </div>
-    <div class="cartFootActions"><button type="button" class="cartContinue" onclick="closeCart()" id="cartContinue">متابعة التسوق</button><button type="button" onclick="clearCartPreview()" id="cartClear">تفريغ السلة</button></div>
-    <p class="cartFooterWarning" id="cartFooterWarning">نسخة معاينة — بدون تسجيل دخول أو دفع أو إتمام طلب.</p>
+    <div class="cartFootActions"><button type="button" class="cartCheckout" id="cartCheckout" onclick="openCheckoutPreview()">متابعة لإتمام الطلب التجريبي</button><button type="button" class="cartContinue" onclick="closeCart()" id="cartContinue">متابعة التسوق</button><button type="button" onclick="clearCartPreview()" id="cartClear">تفريغ السلة</button></div>
+    <p class="cartFooterWarning" id="cartFooterWarning">نسخة معاينة — إتمام الطلب تجريبي فقط، بدون إرسال أو دفع.</p>
   </div>
+</div>
+
+<div class="checkoutOverlay" id="checkoutModal" role="dialog" aria-modal="true" aria-label="إتمام الطلب التجريبي" onclick="if(event.target===this)closeCheckoutPreview()">
+ <div class="checkoutSheet" dir="rtl">
+  <div class="checkoutTop"><div><h2>🧾 إتمام الطلب — معاينة فقط</h2><p>ROYA STOR · نموذج تجريبي لحساب الخصم والشحن</p></div><button type="button" class="cartClose" onclick="closeCheckoutPreview()" aria-label="إغلاق">×</button></div>
+  <div class="checkoutBanner">🔒 <strong>تجربة آمنة:</strong> استخدمي بيانات وهمية أثناء الاختبار. البيانات المدخلة لا تُرسل لأي جهة ولا تُحفظ في قاعدة بيانات أو في سلة المتجر، ولا يتم إنشاء أي طلب حقيقي.</div>
+  <form id="checkoutForm" novalidate autocomplete="off" onsubmit="previewCheckout(event)">
+   <section class="checkoutSection">
+    <h3>بيانات العميلة</h3>
+    <div class="checkoutFields">
+     <label class="checkoutField">الاسم الأول *<input name="firstName" type="text" minlength="2" maxlength="45" required autocomplete="off" placeholder="مثال: سارة"></label>
+     <label class="checkoutField">اسم العائلة *<input name="lastName" type="text" minlength="2" maxlength="45" required autocomplete="off" placeholder="مثال: أحمد"></label>
+     <label class="checkoutField">رقم الموبايل المصري *<input name="mobile" type="tel" inputmode="numeric" pattern="01[0125][0-9]{8}" minlength="11" maxlength="11" required autocomplete="off" placeholder="01000000000"><small>11 رقم، يبدأ بـ 010 أو 011 أو 012 أو 015</small></label>
+     <label class="checkoutField">رقم واتساب *<input name="whatsapp" type="tel" inputmode="numeric" pattern="01[0125][0-9]{8}" minlength="11" maxlength="11" required autocomplete="off" placeholder="01000000000"><small>لازم يتكتب حتى لو نفس رقم الموبايل</small></label>
+    </div>
+   </section>
+   <section class="checkoutSection">
+    <h3>عنوان التوصيل والشحن</h3>
+    <div class="checkoutFields">
+     <label class="checkoutField">المحافظة *<select id="checkoutGovernorate" name="governorate" onchange="renderCheckoutPreview()" required><option value="">اختاري المحافظة</option></select></label>
+     <label class="checkoutField">المدينة / المنطقة *<input name="district" type="text" minlength="2" maxlength="70" required autocomplete="off" placeholder="المنطقة أو المركز"></label>
+     <label class="checkoutField wide">العنوان التفصيلي *<textarea name="address" minlength="8" maxlength="280" required autocomplete="off" placeholder="الشارع، رقم العقار، الدور، الشقة..."></textarea></label>
+     <label class="checkoutField wide">علامة مميزة قريبة *<input name="landmark" type="text" minlength="2" maxlength="120" required autocomplete="off" placeholder="مثال: بجوار مدرسة أو صيدلية"></label>
+    </div>
+    <p class="checkoutHelp">الشحن مبلغ واحد لكل طلب حسب المحافظة، بغض النظر عن عدد القطع. خصومات الكميات على المنتجات فقط، ولا تشمل الشحن.</p>
+   </section>
+   <section class="checkoutSection"><h3>طريقة الدفع</h3><div class="checkoutRadio"><input type="radio" checked disabled aria-label="الدفع عند الاستلام">الدفع عند الاستلام فقط (تجربة — بدون دفع)</div></section>
+   <section class="checkoutSection"><h3>ملخص الطلب التجريبي</h3>
+    <div class="checkoutLineItems" id="checkoutItems"></div>
+    <div class="checkoutPrice" aria-live="polite">
+     <div class="checkoutPriceRow"><span>قيمة المنتجات</span><strong id="checkoutSubtotal">—</strong></div>
+     <div class="checkoutPriceRow"><span id="checkoutDiscountLabel">خصم الكميات</span><strong id="checkoutDiscount">—</strong></div>
+     <div class="checkoutPriceRow"><span>مصاريف الشحن</span><strong id="checkoutShipping">اختاري المحافظة</strong></div>
+     <div class="checkoutPriceRow big"><span>الإجمالي شامل الشحن</span><strong id="checkoutGrand">—</strong></div>
+    </div>
+    <p class="checkoutError" id="checkoutValidationMsg" role="alert"></p>
+    <div class="checkoutActions"><button type="submit" class="checkoutPrimary">عرض ملخص تجريبي — بدون إرسال طلب</button><button type="button" onclick="backToCartPreview()">الرجوع للسلة</button></div>
+    <div class="checkoutReview" id="checkoutReview" hidden role="status" aria-live="polite"><h3>✅ التجربة تمت بنجاح</h3><p id="checkoutReviewText"></p><p>ده مجرد اختبار للحسابات. <strong>لم يتم إرسال الطلب، ولم يتم حفظ أي بيانات عميل.</strong></p></div>
+   </section>
+  </form>
+ </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -306,6 +394,84 @@ function addCurrentToCart(){
  savePreviewCart();
  closeModal();openCart();
 }
+const ROYA_SHIPPING_BY_GOVERNORATE={"القاهرة":70,"الجيزة":70,"بني سويف":90,"المنيا":90,"أسيوط":90,"سوهاج":90,"قنا":90,"الأقصر":90,"أسوان":90,"البحر الأحمر":140,"مطروح":140,"شمال سيناء":140,"جنوب سيناء":140,"الوادي الجديد":140,"الإسكندرية":80,"القليوبية":80,"الشرقية":80,"الدقهلية":80,"الغربية":80,"المنوفية":80,"البحيرة":80,"كفر الشيخ":80,"دمياط":80,"بورسعيد":80,"الإسماعيلية":80,"السويس":80,"الفيوم":80};
+
+function initCheckoutPreview(){
+ const sel=el('checkoutGovernorate');
+ const fees=ROYA_SHIPPING_BY_GOVERNORATE;
+ sel.innerHTML='<option value="">اختاري المحافظة</option>'+Object.keys(fees).sort((a,b)=>a.localeCompare(b,'ar')).map(g=>`<option value="${g}">${g}</option>`).join('');
+}
+function calcCheckoutPreview(){
+ const qty=cartPieceCount();
+ const subtotal=previewCart.reduce((sum,item)=>sum+750*item.qty,0);
+ const pct=previewDiscountPercent(qty);
+ const discount=Math.round(subtotal*pct)/100;
+ const governorate=el('checkoutGovernorate').value;
+ const fee=Object.prototype.hasOwnProperty.call(ROYA_SHIPPING_BY_GOVERNORATE,governorate)?ROYA_SHIPPING_BY_GOVERNORATE[governorate]:null;
+ return {qty,subtotal,pct,discount,fee,grand:fee===null?null:subtotal-discount+fee,governorate};
+}
+function renderCheckoutPreview(){
+ const t=calcCheckoutPreview();
+ el('checkoutSubtotal').textContent=moneyEGP(t.subtotal);
+ el('checkoutDiscountLabel').textContent='خصم الكميات ('+t.pct+'%)';
+ el('checkoutDiscount').textContent=moneyEGP(t.discount);
+ el('checkoutShipping').textContent=t.fee===null?'اختاري المحافظة':moneyEGP(t.fee);
+ el('checkoutGrand').textContent=t.grand===null?'—':moneyEGP(t.grand);
+ el('checkoutItems').innerHTML=previewCart.map(item=>{
+  const p=products.find(x=>x.code===item.code);
+  if(!p)return '';
+  return `<span class="checkoutPill">${escapeHTML(p.name)} · ${escapeHTML(item.size)} · ${item.qty} ${item.qty===1?'قطعة':'قطع'}</span>`;
+ }).join('');
+ el('checkoutReview').hidden=true;
+}
+function openCheckoutPreview(){
+ if(!previewCart.length){toast('ضيفي منتجات للسلة الأول عشان تجربي إتمام الطلب.');return}
+ closeCart();
+ el('checkoutForm').reset();
+ el('checkoutValidationMsg').textContent='';
+ el('checkoutReview').hidden=true;
+ renderCheckoutPreview();
+ el('checkoutModal').classList.add('show');
+ document.body.style.overflow='hidden';
+}
+function closeCheckoutPreview(){
+ el('checkoutModal').classList.remove('show');
+ el('checkoutForm').reset();
+ el('checkoutValidationMsg').textContent='';
+ el('checkoutReview').hidden=true;
+ document.body.style.overflow='';
+}
+function backToCartPreview(){closeCheckoutPreview();openCart()}
+function previewCheckout(event){
+ event.preventDefault();
+ const form=el('checkoutForm');
+ if(!form.checkValidity()){
+  el('checkoutValidationMsg').textContent='من فضلك املئي كل الخانات المطلوبة بشكل صحيح. الأرقام لازم تكون موبايل مصري 11 رقم.';
+  form.reportValidity();
+  return false;
+ }
+ const data=new FormData(form);
+ const first=(data.get('firstName')||'').toString().trim();
+ const last=(data.get('lastName')||'').toString().trim();
+ const district=(data.get('district')||'').toString().trim();
+ const address=(data.get('address')||'').toString().trim();
+ const landmark=(data.get('landmark')||'').toString().trim();
+ if([first,last,district,landmark].some(v=>v.length<2)||address.length<8){
+  el('checkoutValidationMsg').textContent='راجعي الاسم والعنوان وعلامة المكان المميزة قبل المعاينة.';
+  return false;
+ }
+ const t=calcCheckoutPreview();
+ if(t.fee===null||t.qty===0){
+  el('checkoutValidationMsg').textContent='اختاري المحافظة وتأكدي إن فيه قطع في السلة.';
+  return false;
+ }
+ el('checkoutValidationMsg').textContent='';
+ el('checkoutReviewText').textContent='تم حساب '+t.qty+' قطع بمحافظة '+t.governorate+'، وخصم '+t.pct+'%، وشحن '+moneyEGP(t.fee)+'؛ الإجمالي التجريبي '+moneyEGP(t.grand)+'.';
+ el('checkoutReview').hidden=false;
+ el('checkoutReview').scrollIntoView({behavior:'smooth',block:'nearest'});
+ return false;
+}
+
 function closeCart(){el('cartModal').classList.remove('show');document.body.style.overflow=''}
 function openCart(){closeModal();renderCart();el('cartModal').classList.add('show');document.body.style.overflow='hidden'}
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -371,8 +537,10 @@ function renderCart(){
  el('cartShippingNote').textContent=ar?'الشحن غير محسوب. الدفع والطلب الحقيقي غير متاحين.':'Shipping not included. Checkout and real orders are disabled.';
  el('cartContinue').textContent=ar?'متابعة التسوق':'Continue shopping';
  el('cartClear').textContent=ar?'تفريغ السلة':'Clear cart';
- el('cartFooterWarning').textContent=ar?'نسخة معاينة — بدون تسجيل دخول أو دفع أو إتمام طلب.':'Preview mode — no sign-in, payment or checkout.';
+ el('cartFooterWarning').textContent=ar?'نسخة معاينة — حساب طلب تجريبي بدون تسجيل أو دفع أو إرسال.':'Preview only — no sign-in, payment or real order submission.';
  el('cartClear').disabled=!previewCart.length;
+ el('cartCheckout').disabled=!previewCart.length;
+ el('cartCheckout').textContent=ar?'متابعة لإتمام الطلب التجريبي':'Preview checkout';
  if(el('navCartLabel'))el('navCartLabel').textContent=ar?'السلة':'Cart';
  updateCartBadges();
 }
@@ -383,8 +551,9 @@ function toggleAll(){expanded=!expanded;renderProducts();el('featured').scrollIn
 el('showAll').addEventListener('click',toggleAll);el('topShowAll').addEventListener('click',toggleAll);
 el('search').addEventListener('input',e=>{filter=e.target.value.trim().toLowerCase();renderProducts();if(filter)el('featured').scrollIntoView({block:'start',behavior:'smooth'})});
 el('lang').addEventListener('click',()=>{language=language==='ar'?'en':'ar';document.documentElement.lang=language;el('lang').textContent=language==='ar'?'EN':'عربي';el('search').placeholder=language==='ar'?'ابحثي عن لون أو بنطلون...':'Search colors or pants...';renderCategories();renderProducts();renderFabric();renderSizeGuide();renderPreviewDiscountLanguage();renderCart();el('addCartButton').textContent=language==='ar'?'🛒 إضافة للسلة التجريبية':'🛒 Add to preview cart';el('cartAddNote').textContent=language==='ar'?'اختاري المقاس وحددي عدد القطع من الأعلى ثم أضيفي للسلة التجريبية. لا يتم إرسال طلبات.':'Select a size and quantity above, then add to the preview cart. No orders are sent.'});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(el('cartModal').classList.contains('show'))closeCart();else closeModal()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(el('checkoutModal').classList.contains('show'))closeCheckoutPreview();else if(el('cartModal').classList.contains('show'))closeCart();else closeModal()}});
 el('otherCategories').innerHTML=categories.filter((_,i)=>i!==1).map(([title,_,symbol])=>`<div class="soonCard"><strong>${symbol}</strong><small>${title}<br>الصور قريبًا</small></div>`).join('');
 previewCart=readPreviewCart();
+initCheckoutPreview();
 renderCategories();renderProducts();renderFabric();renderSizeGuide();renderPreviewDiscountLanguage();renderCart();
 </script></body></html>
